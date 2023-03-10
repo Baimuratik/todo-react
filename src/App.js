@@ -1,23 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import Addtodo from "./components/Addtodo";
+import EditTodo from "./components/EditTodo";
+import Todolist from "./components/Todolist";
 
 function App() {
+  const [todos, setTodo] = useState([]);
+
+  const [forEditVal, setForEditVal] = useState(null);
+
+  console.log(todos);
+
+  function addTodo(todo) {
+    setTodo([...todos, todo]);
+  }
+
+  function deleteTodo(id) {
+    const filtered = todos.filter((item) => item.id != id);
+
+    setTodo(filtered);
+  }
+
+  function editTodo(editedTodo) {
+    const newArr = todos.map((item) => {
+      if ((item.id = editedTodo.id)) {
+        return editedTodo;
+      }
+    });
+    setTodo(newArr);
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Addtodo addTodo={addTodo} />
+      {forEditVal ? (
+        <EditTodo
+          editTodo={editTodo}
+          setForEditVal={setForEditVal}
+          forEditVal={forEditVal}
+        />
+      ) : null}
+      <Todolist
+        setForEditVal={setForEditVal}
+        todos={todos}
+        deleteTodo={deleteTodo}
+      />
     </div>
   );
 }
